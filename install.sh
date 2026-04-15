@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Настройки (уже под твой репозиторий)
+# --- Настройки ---
+# Ссылка на сам файл (убрал лишнее из URL для корректной конкатенации)
 REPO_URL="https://raw.githubusercontent.com/skyfox25-source/my-byedpi_for_cloudru/main/ciadpi-x86_64"
 FILE_NAME="ciadpi-x86_64"
 INSTALL_DIR="/usr/local/bin"
@@ -8,11 +9,15 @@ INSTALL_DIR="/usr/local/bin"
 echo "--- Установка ByeDPI для Cloud.ru ---"
 
 # 1. Скачивание файла
-sudo wget -O $INSTALL_DIR/$FILE_NAME "$REPO_URL/$FILE_NAME"
-sudo chmod +x $INSTALL_DIR/$FILE_NAME
+echo "Скачивание исполняемого файла..."
+sudo wget -O "$INSTALL_DIR/$FILE_NAME" "$REPO_URL"
+sudo chmod +x "$INSTALL_DIR/$FILE_NAME"
 
-# 2. Создание сервиса (-d 1 -m 1, как мы подобрали)
-sudo bash -c "cat <<EOT > /etc/systemd/system/byedpi.service
+# 2. Создание сервиса
+# Используем <<'EOF' (в кавычках), чтобы переменные внутри блока не подставлялись сейчас,
+# а записывались в файл как текст.
+echo "Создание системного сервиса..."
+sudo bash -c "cat <<'EOF' > /etc/systemd/system/byedpi.service
 [Unit]
 Description=ByeDPI Service
 After=network.target
@@ -20,15 +25,16 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart=$INSTALL_DIR/$FILE_NAME -d 1 -m 1 -p 1080
+ExecStart=/usr/local/bin/ciadpi-x86_64 -d 1 -m 1 -p 1080
 Restart=always
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
-EOT"
+EOF"
 
 # 3. Запуск
+echo "Запуск и включение автозагрузки..."
 sudo systemctl daemon-reload
 sudo systemctl enable byedpi
 sudo systemctl restart byedpi
