@@ -25,7 +25,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/ciadpi-x86_64 -d 1 -m 1 -p 1080
+ExecStart=/usr/local/bin/ciadpi-x86_64 -d 1 -f 1 -e 1 -p 1080
 Restart=always
 RestartSec=5
 
