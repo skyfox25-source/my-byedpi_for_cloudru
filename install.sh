@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Настройки (уже под твой репозиторий)
-REPO_URL="https://githubusercontent.com"
+REPO_URL="https://raw.githubusercontent.com/skyfox25-source/my-byedpi_for_cloudru/main/ciadpi-x86_64"
 FILE_NAME="ciadpi-x86_64"
 INSTALL_DIR="/usr/local/bin"
 
